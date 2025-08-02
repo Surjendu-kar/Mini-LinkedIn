@@ -2,8 +2,6 @@ import { create } from "zustand";
 import { User } from "@supabase/supabase-js";
 import { supabase, UserProfile } from "@/lib/supabase";
 
-// UserProfile is now imported from lib/supabase.ts
-
 interface AuthState {
   user: User | null;
   userProfile: UserProfile | null;
@@ -24,7 +22,7 @@ interface AuthState {
   initializeAuth: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   userProfile: null,
   initializing: true,
@@ -59,8 +57,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         userProfile: profile,
         loading: false,
       });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Login failed";
+      set({ error: errorMessage, loading: false });
       throw error;
     }
   },
@@ -104,8 +104,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         userProfile: null,
         loading: false,
       });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Signup failed";
+      set({ error: errorMessage, loading: false });
       throw error;
     }
   },
@@ -114,8 +116,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       await supabase.auth.signOut();
       set({ user: null, userProfile: null, error: null });
-    } catch (error: any) {
-      set({ error: error.message });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Logout failed";
+      set({ error: errorMessage });
       throw error;
     }
   },
@@ -145,7 +149,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
 
     // Listen for auth changes
-    supabase.auth.onAuthStateChange(async (event, session) => {
+    supabase.auth.onAuthStateChange(async (_, session) => {
       if (session?.user) {
         // Get user profile
         const { data: profile } = await supabase

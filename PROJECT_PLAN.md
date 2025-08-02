@@ -68,9 +68,10 @@ mini-linkedin/
    - User profiles stored in PostgreSQL `users` table
    - Automatic profile creation on signup
 
-6. **Profile Display** 🔄 IN PROGRESS
-   - `app/profile/[userId]/page.tsx` - View user profiles (TODO)
-   - `components/ProfileCard.tsx` - Reusable profile component (TODO)
+6. **Profile Display** ✅ COMPLETED
+   - `app/profile/[userId]/page.tsx` - View user profiles with posts
+   - `components/ProfileCard.tsx` - Reusable profile component
+   - `components/PostCard.tsx` - Reusable post component
 
 ### Phase 3: Post System (Priority 3)
 

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuthStore } from "@/store/authStore";
 
 export default function Home() {
@@ -48,6 +49,14 @@ export default function Home() {
               {userProfile?.bio && (
                 <p className="text-gray-600 mt-1">Bio: {userProfile.bio}</p>
               )}
+              <div className="mt-4">
+                <Link
+                  href={`/profile/${user.id}`}
+                  className="text-indigo-600 hover:text-indigo-800 font-medium"
+                >
+                  View Profile →
+                </Link>
+              </div>
             </div>
             <button
               onClick={handleLogout}
