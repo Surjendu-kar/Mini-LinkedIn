@@ -113,16 +113,6 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-8 px-4">
-        {/* Navigation */}
-        <div className="mb-6">
-          <button
-            onClick={() => router.push("/")}
-            className="text-indigo-600 hover:text-indigo-800 font-medium"
-          >
-            ← Back to Home
-          </button>
-        </div>
-
         {/* Profile Card */}
         {profile && (
           <ProfileCard
