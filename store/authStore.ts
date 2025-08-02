@@ -131,50 +131,37 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   clearError: () => set({ error: null }),
 
-  initializeAuth: () => {
+  initializeAuth: async () => {
     // Prevent multiple initializations
     const currentState = get();
-    if (currentState.user !== null || !currentState.initializing) {
+    if (!currentState.initializing) {
       return;
     }
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        // Get user profile
-        supabase
-          .from("users")
-          .select("*")
-          .eq("id", session.user.id)
-          .single()
-          .then(({ data: profile }) => {
-            set({
-              user: session.user,
-              userProfile: profile,
-              initializing: false,
-            });
-          });
-      } else {
-        set({ user: null, userProfile: null, initializing: false });
-      }
-    });
+    try {
+      // Get initial session
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
 
-    // Listen for auth changes (only set up once)
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", event, session?.user?.id);
-
-      if (event === "SIGNED_OUT") {
+      if (error) {
+        console.error("Session error:", error);
         set({ user: null, userProfile: null, initializing: false });
         return;
       }
 
       if (session?.user) {
         // Get user profile
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from("users")
           .select("*")
           .eq("id", session.user.id)
           .single();
+
+        if (profileError) {
+          console.error("Profile fetch error:", profileError);
+        }
 
         set({
           user: session.user,
@@ -184,6 +171,35 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       } else {
         set({ user: null, userProfile: null, initializing: false });
       }
-    });
+
+      // Listen for auth changes (only set up once)
+      supabase.auth.onAuthStateChange(async (event, session) => {
+        console.log("Auth state changed:", event, session?.user?.id);
+
+        if (event === "SIGNED_OUT") {
+          set({ user: null, userProfile: null });
+          return;
+        }
+
+        if (session?.user) {
+          // Get user profile
+          const { data: profile } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+
+          set({
+            user: session.user,
+            userProfile: profile,
+          });
+        } else {
+          set({ user: null, userProfile: null });
+        }
+      });
+    } catch (error) {
+      console.error("Auth initialization error:", error);
+      set({ user: null, userProfile: null, initializing: false });
+    }
   },
 }));

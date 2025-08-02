@@ -11,18 +11,11 @@ export default function Home() {
   const { user, userProfile, initializing, logout, initializeAuth } =
     useAuthStore();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [feedKey, setFeedKey] = useState(0);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      initializeAuth();
-    }
-  }, [mounted, initializeAuth]);
+    initializeAuth();
+  }, [initializeAuth]);
 
   const handlePostCreated = () => {
     // Force feed to refresh by changing key
@@ -38,7 +31,7 @@ export default function Home() {
     }
   };
 
-  if (!mounted || initializing) {
+  if (initializing) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-xl">Loading...</div>

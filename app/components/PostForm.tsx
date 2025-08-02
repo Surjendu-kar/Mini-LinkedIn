@@ -58,7 +58,11 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      handleSubmit(e as any);
+      const formEvent = new Event("submit", {
+        bubbles: true,
+        cancelable: true,
+      });
+      handleSubmit(formEvent as unknown as React.FormEvent);
     }
   };
 

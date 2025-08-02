@@ -10,30 +10,15 @@ import PostCard from "@/app/components/PostCard";
 export default function ProfilePage() {
   const params = useParams();
   const router = useRouter();
-  const { user, initializing } = useAuthStore();
+  const { user, initializing, initializeAuth } = useAuthStore();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
 
   const userId = params.userId as string;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted && !initializing) {
-      if (!user) {
-        router.push("/auth/login");
-        return;
-      }
-      loadProfile();
-    }
-  }, [mounted, initializing, user, userId]);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -70,10 +55,23 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
-  // Prevent hydration mismatch
-  if (!mounted || initializing) {
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
+  useEffect(() => {
+    if (!initializing) {
+      if (!user) {
+        router.push("/auth/login");
+        return;
+      }
+      loadProfile();
+    }
+  }, [initializing, user, loadProfile, router]);
+
+  if (initializing) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-xl">Loading...</div>
