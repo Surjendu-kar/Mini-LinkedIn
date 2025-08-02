@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuthStore } from "@/store/authStore";
 
 export default function SignupPage() {
@@ -14,6 +15,16 @@ export default function SignupPage() {
   });
   const { signup, loading, error, clearError } = useAuthStore();
   const router = useRouter();
+
+  // Footer links array
+  const footerLinks = [
+    "User Agreement",
+    "Privacy Policy",
+    "Community Guidelines",
+    "Cookie Policy",
+    "Copyright Policy",
+    "Send Feedback",
+  ];
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -43,103 +54,203 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-              {error}
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* LinkedIn Logo */}
+      <div className="pt-6 pl-6">
+        <Image
+          src="/logo/Linkedin.svg"
+          alt="LinkedIn"
+          width={135}
+          height={34}
+          className="h-8 w-auto"
+          priority
+        />
+      </div>
+
+      {/* Main Content */}
+      <div className="flex items-center justify-center my-auto">
+        <div className="w-full max-w-md">
+          {/* Sign up Card */}
+          <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8">
+            <div className="text-center mb-6">
+              <h1 className="text-3xl font-normal text-gray-900 mb-2">
+                Join LinkedIn
+              </h1>
+              <p className="text-gray-600">
+                Make the most of your professional life
+              </p>
             </div>
-          )}
 
-          <div>
-            <label htmlFor="name" className="sr-only">
-              Full Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Full Name"
-            />
-          </div>
+            <form onSubmit={handleSubmit}>
+              <div className="space-y-4">
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
+                    {error}
+                  </div>
+                )}
 
-          <div>
-            <label htmlFor="email" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Email address"
-            />
-          </div>
+                {/* Name Input */}
+                <div>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] text-[15px]"
+                    placeholder="Full Name"
+                  />
+                </div>
 
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Password"
-            />
-          </div>
+                {/* Email Input */}
+                <div>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] text-[15px]"
+                    placeholder="Email"
+                  />
+                </div>
 
-          <div>
-            <label htmlFor="bio" className="sr-only">
-              Bio
-            </label>
-            <textarea
-              id="bio"
-              name="bio"
-              rows={3}
-              value={formData.bio}
-              onChange={handleChange}
-              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Tell us about yourself..."
-            />
-          </div>
+                {/* Password Input */}
+                <div>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] text-[15px]"
+                    placeholder="Password (6+ characters)"
+                  />
+                </div>
 
-          <div>
+                {/* Bio Input */}
+                <div>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    rows={3}
+                    value={formData.bio}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] text-[15px] resize-none"
+                    placeholder="Tell us about yourself (optional)"
+                  />
+                </div>
+              </div>
+
+              {/* Sign Up Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="cursor-pointer w-full bg-[#0A66C2] hover:bg-[#084d94] text-white font-medium py-3 px-4 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+              >
+                {loading ? "Creating account..." : "Agree & Join"}
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500">or</span>
+              </div>
+            </div>
+
+            {/* Google Sign Up Button */}
             <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              type="button"
+              className="w-full border border-gray-300 hover:border-gray-400 text-gray-700 font-medium py-3 px-4 rounded-full transition-colors flex items-center justify-center space-x-3 cursor-pointer"
             >
-              {loading ? "Creating account..." : "Sign up"}
+              <Image
+                src="/logo/Google.svg"
+                alt="Google"
+                width={20}
+                height={20}
+                className="w-5 h-5"
+              />
+              <span>Continue with Google</span>
             </button>
+
+            {/* Terms Agreement */}
+            <div className="text-center mt-4">
+              <p className="text-xs text-gray-600 leading-relaxed">
+                By clicking Agree & Join or Continue, you agree to the LinkedIn{" "}
+                <a href="#" className="text-[#0A66C2] hover:text-[#084d94]">
+                  User Agreement
+                </a>
+                ,{" "}
+                <a href="#" className="text-[#0A66C2] hover:text-[#084d94]">
+                  Privacy Policy
+                </a>
+                , and{" "}
+                <a href="#" className="text-[#0A66C2] hover:text-[#084d94]">
+                  Cookie Policy
+                </a>
+                .
+              </p>
+            </div>
           </div>
 
-          <div className="text-center">
+          {/* Already have account - Outside the card */}
+          <div className="text-center mt-6">
+            <span className="text-gray-600">Already on LinkedIn? </span>
             <Link
               href="/auth/login"
-              className="text-indigo-600 hover:text-indigo-500"
+              className="text-[#0A66C2] hover:text-[#084d94] font-medium"
             >
-              Already have an account? Sign in
+              Sign in
             </Link>
           </div>
-        </form>
+        </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 py-6 mt-8">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-wrap items-center justify-between text-sm text-gray-600">
+            <div className="flex items-center space-x-2 mb-4 lg:mb-0">
+              <Image
+                src="/logo/Linkedin.svg"
+                alt="LinkedIn"
+                width={67}
+                height={17}
+                className="h-4 w-auto"
+              />
+              <span className="text-gray-600">© 2025</span>
+            </div>
+            <div className="flex flex-wrap gap-4 text-xs">
+              {footerLinks.map((link, index) => (
+                <a key={index} href="#" className="hover:text-[#0A66C2]">
+                  {link}
+                </a>
+              ))}
+              <div className="flex items-center">
+                <span>Language</span>
+                <svg
+                  className="w-4 h-4 ml-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

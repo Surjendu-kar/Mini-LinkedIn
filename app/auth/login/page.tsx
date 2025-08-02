@@ -177,7 +177,7 @@ export default function LoginPage() {
                 height={17}
                 className="h-4 w-auto"
               />
-              <span className="text-gray-600">© 2024</span>
+              <span className="text-gray-600">© 2025</span>
             </div>
             <div className="flex flex-wrap gap-4 text-xs">
               {footerLinks.map((link, index) => (
