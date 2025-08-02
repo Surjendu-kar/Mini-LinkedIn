@@ -22,7 +22,7 @@ interface AuthState {
   initializeAuth: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   userProfile: null,
   initializing: true,
@@ -114,7 +114,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: async () => {
     try {
-      await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        throw error;
+      }
+
       set({ user: null, userProfile: null, error: null });
     } catch (error) {
       const errorMessage =
@@ -127,6 +132,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearError: () => set({ error: null }),
 
   initializeAuth: () => {
+    // Prevent multiple initializations
+    const currentState = get();
+    if (currentState.user !== null || !currentState.initializing) {
+      return;
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
@@ -148,8 +159,15 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
     });
 
-    // Listen for auth changes
-    supabase.auth.onAuthStateChange(async (_, session) => {
+    // Listen for auth changes (only set up once)
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event, session?.user?.id);
+
+      if (event === "SIGNED_OUT") {
+        set({ user: null, userProfile: null, initializing: false });
+        return;
+      }
+
       if (session?.user) {
         // Get user profile
         const { data: profile } = await supabase

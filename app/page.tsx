@@ -1,18 +1,33 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/authStore";
+import PostForm from "./components/PostForm";
+import PostsFeed from "./components/PostsFeed";
 
 export default function Home() {
   const { user, userProfile, initializing, logout, initializeAuth } =
     useAuthStore();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  const [feedKey, setFeedKey] = useState(0);
 
   useEffect(() => {
-    initializeAuth();
-  }, [initializeAuth]);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      initializeAuth();
+    }
+  }, [mounted, initializeAuth]);
+
+  const handlePostCreated = () => {
+    // Force feed to refresh by changing key
+    setFeedKey((prev) => prev + 1);
+  };
 
   const handleLogout = async () => {
     try {
@@ -23,7 +38,7 @@ export default function Home() {
     }
   };
 
-  if (initializing) {
+  if (!mounted || initializing) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-xl">Loading...</div>
@@ -67,11 +82,15 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">Home Feed</h2>
-          <p className="text-gray-600">
-            Posts will appear here in the next phase...
-          </p>
+        {/* Post Creation Form */}
+        <PostForm onPostCreated={handlePostCreated} />
+
+        {/* Posts Feed */}
+        <div>
+          <h2 className="text-xl font-semibold mb-6 text-gray-900">
+            Recent Posts
+          </h2>
+          <PostsFeed key={feedKey} />
         </div>
       </div>
     </div>
