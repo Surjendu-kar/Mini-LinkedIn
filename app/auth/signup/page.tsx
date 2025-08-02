@@ -13,7 +13,6 @@ export default function SignupPage() {
     bio: "",
   });
   const { signup, loading, error, clearError } = useAuthStore();
-  console.log(loading);
   const router = useRouter();
 
   const handleChange = (

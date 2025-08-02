@@ -1,21 +1,8 @@
 import { create } from "zustand";
-import { User } from "firebase/auth";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+import { User } from "@supabase/supabase-js";
+import { supabase, UserProfile } from "@/lib/supabase";
 
-interface UserProfile {
-  id: string;
-  name: string;
-  email: string;
-  bio: string;
-  createdAt: Date;
-}
+// UserProfile is now imported from lib/supabase.ts
 
 interface AuthState {
   user: User | null;
@@ -47,30 +34,31 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   login: async (email: string, password: string) => {
     try {
       set({ loading: true, error: null });
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
 
-      // Get user profile from Firestore
-      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
-      if (userDoc.exists()) {
-        const profileData = userDoc.data();
-        set({
-          user: userCredential.user,
-          userProfile: {
-            id: userCredential.user.uid,
-            name: profileData.name,
-            email: profileData.email,
-            bio: profileData.bio,
-            createdAt: profileData.createdAt.toDate(),
-          },
-          loading: false,
-        });
-      } else {
-        set({ user: userCredential.user, loading: false });
+      // Sign in with Supabase Auth
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      // Get user profile from database
+      const { data: profile, error: profileError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", data.user.id)
+        .single();
+
+      if (profileError) {
+        console.error("Profile fetch error:", profileError);
       }
+
+      set({
+        user: data.user,
+        userProfile: profile,
+        loading: false,
+      });
     } catch (error: any) {
       set({ error: error.message, loading: false });
       throw error;
@@ -85,30 +73,31 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   ) => {
     try {
       set({ loading: true, error: null });
-      console.log("Starting signup process...");
 
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
+      // Sign up with Supabase Auth
+      const { data, error } = await supabase.auth.signUp({
         email,
-        password
-      );
-      console.log("User created successfully:", userCredential.user.uid);
+        password,
+      });
 
-      // Create user profile in Firestore
-      const userProfile = {
-        name,
-        email,
-        bio,
-        createdAt: new Date(),
-      };
+      if (error) throw error;
 
-      console.log("Creating user profile in Firestore...");
-      await setDoc(doc(db, "users", userCredential.user.uid), userProfile);
-      console.log("User profile created successfully");
+      // Create user profile in database
+      if (data.user) {
+        const { error: profileError } = await supabase.from("users").insert([
+          {
+            id: data.user.id,
+            name,
+            email,
+            bio,
+          },
+        ]);
 
-      // Sign out the user after successful signup
-      await signOut(auth);
-      console.log("User signed out after signup");
+        if (profileError) throw profileError;
+      }
+
+      // Sign out after successful signup
+      await supabase.auth.signOut();
 
       set({
         user: null,
@@ -116,7 +105,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         loading: false,
       });
     } catch (error: any) {
-      console.error("Signup error:", error);
       set({ error: error.message, loading: false });
       throw error;
     }
@@ -124,7 +112,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   logout: async () => {
     try {
-      await signOut(auth);
+      await supabase.auth.signOut();
       set({ user: null, userProfile: null, error: null });
     } catch (error: any) {
       set({ error: error.message });
@@ -135,24 +123,42 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   clearError: () => set({ error: null }),
 
   initializeAuth: () => {
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // Get user profile from Firestore
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const profileData = userDoc.data();
-          set({
-            user,
-            userProfile: {
-              id: user.uid,
-              name: profileData.name,
-              email: profileData.email,
-              bio: profileData.bio,
-              createdAt: profileData.createdAt.toDate(),
-            },
-            initializing: false,
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        // Get user profile
+        supabase
+          .from("users")
+          .select("*")
+          .eq("id", session.user.id)
+          .single()
+          .then(({ data: profile }) => {
+            set({
+              user: session.user,
+              userProfile: profile,
+              initializing: false,
+            });
           });
-        }
+      } else {
+        set({ user: null, userProfile: null, initializing: false });
+      }
+    });
+
+    // Listen for auth changes
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        // Get user profile
+        const { data: profile } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+
+        set({
+          user: session.user,
+          userProfile: profile,
+          initializing: false,
+        });
       } else {
         set({ user: null, userProfile: null, initializing: false });
       }

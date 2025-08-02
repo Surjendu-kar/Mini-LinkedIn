@@ -3,7 +3,8 @@
 ## Tech Stack
 
 - **Frontend**: Next.js 15 + React 19 + TypeScript + Tailwind CSS + Zustand
-- **Backend**: Firebase (Authentication, Firestore Database, Hosting)
+- **Backend**: Supabase (PostgreSQL Database + Authentication)
+- **Database**: PostgreSQL via Supabase
 - **Deployment**: Vercel
 
 ## Project Structure
@@ -20,15 +21,12 @@ mini-linkedin/
 │   │   └── [userId]/
 │   │       └── page.tsx
 │   ├── components/
-│   │   ├── AuthForm.tsx
 │   │   ├── PostCard.tsx
 │   │   ├── PostForm.tsx
 │   │   ├── ProfileCard.tsx
 │   │   └── Navbar.tsx
 │   ├── lib/
-│   │   ├── firebase.ts
-│   │   ├── auth.ts
-│   │   └── firestore.ts
+│   │   └── supabase.ts
 │   ├── store/
 │   │   └── authStore.ts
 │   ├── layout.tsx
@@ -39,38 +37,40 @@ mini-linkedin/
 
 ## Development Steps
 
-### Phase 1: Firebase Setup & Authentication (Priority 1)
+### Phase 1: Supabase Setup & Authentication (Priority 1) ✅ COMPLETED
 
-1. **Setup Firebase Configuration**
+1. **Setup Supabase Configuration**
 
-   - Create `lib/firebase.ts` with proper Firebase initialization
-   - Setup Firebase Auth and Firestore
+   - Create `lib/supabase.ts` with Supabase client initialization
+   - Setup Supabase Auth and PostgreSQL database connection
 
 2. **Create Authentication Store**
 
    - `store/authStore.ts` using Zustand for managing user state globally
-   - Handle login, logout, and user persistence
+   - Handle login, logout, and user persistence with Supabase
 
-3. **Build Auth Pages**
+3. **Build Auth Pages** ✅ COMPLETED
 
-   - `app/auth/login/page.tsx` - Login form
-   - `app/auth/signup/page.tsx` - Registration form
-   - Basic forms with email/password validation
+   - `app/auth/login/page.tsx` - Login form with Supabase auth
+   - `app/auth/signup/page.tsx` - Registration form with profile creation
+   - Email/password validation and error handling
 
-4. **Auth Protection**
-   - Middleware or route protection for authenticated pages
-   - Redirect logic between auth and protected pages
+4. **Database Setup** ✅ COMPLETED
+   - PostgreSQL tables: `users` and `posts`
+   - Row Level Security (RLS) policies implemented
+   - Proper foreign key relationships
 
-### Phase 2: User Profile System (Priority 2)
+### Phase 2: User Profile System (Priority 2) ✅ COMPLETED
 
-5. **User Profile Creation**
+5. **User Profile Creation** ✅ COMPLETED
 
-   - Extend registration to include name, bio
-   - Store user profiles in Firestore
+   - Registration includes name, email, bio fields
+   - User profiles stored in PostgreSQL `users` table
+   - Automatic profile creation on signup
 
-6. **Profile Display**
-   - `app/profile/[userId]/page.tsx` - View user profiles
-   - `components/ProfileCard.tsx` - Reusable profile component
+6. **Profile Display** 🔄 IN PROGRESS
+   - `app/profile/[userId]/page.tsx` - View user profiles (TODO)
+   - `components/ProfileCard.tsx` - Reusable profile component (TODO)
 
 ### Phase 3: Post System (Priority 3)
 
@@ -124,44 +124,47 @@ mini-linkedin/
     - Setup instructions
     - Demo user credentials
 
-## Firebase Collections Structure
+## Supabase Database Schema
 
-### Users Collection
+### Users Table
 
-```javascript
-users: {
-  [userId]: {
-    name: string,
-    email: string,
-    bio: string,
-    createdAt: timestamp
-  }
-}
+```sql
+CREATE TABLE users (
+  id UUID REFERENCES auth.users(id) PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  bio TEXT DEFAULT '',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 ```
 
-### Posts Collection
+### Posts Table
 
-```javascript
-posts: {
-  [postId]: {
-    content: string,
-    authorId: string,
-    authorName: string,
-    createdAt: timestamp
-  }
-}
+```sql
+CREATE TABLE posts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  content TEXT NOT NULL,
+  author_id UUID REFERENCES users(id) NOT NULL,
+  author_name TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 ```
 
-## Key Features Implementation Order
+### Row Level Security Policies
 
-1. ✅ User Registration/Login with email & password
-2. ✅ User profile creation (name, email, bio)
-3. ✅ Create and display text posts
-4. ✅ Home feed with posts, author names, timestamps
-5. ✅ User profile pages showing their posts
-6. ✅ Basic navigation between pages
-7. ✅ Responsive design
-8. ✅ Deployment
+- **Users**: Can only access their own profile data
+- **Posts**: Everyone can read all posts, users can manage their own posts
+
+## Key Features Implementation Status
+
+1. ✅ **COMPLETED**: User Registration/Login with email & password
+2. ✅ **COMPLETED**: User profile creation (name, email, bio)
+3. 🔄 **TODO**: Create and display text posts
+4. 🔄 **TODO**: Home feed with posts, author names, timestamps
+5. 🔄 **TODO**: User profile pages showing their posts
+6. 🔄 **TODO**: Basic navigation between pages
+7. 🔄 **TODO**: Responsive design
+8. 🔄 **TODO**: Deployment
 
 ## Estimated Timeline
 
@@ -171,12 +174,26 @@ posts: {
 - **Phase 6**: 1-2 hours (Deployment + Docs)
 - **Total**: 11-16 hours
 
+## Current Status
+
+✅ **Phase 1 COMPLETED**: Supabase authentication system fully implemented
+
+- User registration and login working
+- PostgreSQL database with proper schema
+- Row Level Security policies configured
+- Zustand state management integrated
+
 ## Next Steps
 
-1. Review this plan and approve
-2. Start with Phase 1: Firebase setup and basic login/signup pages
-3. Test authentication flow before moving to next phase
-4. Iterate through each phase with functionality testing
-5. Focus on UI/UX improvements after core features work
+1. **Phase 3**: Implement post creation and display system
+2. **Phase 4**: Build navigation and user profile pages
+3. **Phase 5**: Enhance UI/UX with better styling
+4. **Phase 6**: Deploy to Vercel and create documentation
 
-Would you like me to proceed with Phase 1 (Firebase setup and authentication) once you approve this plan?
+## Architecture Benefits
+
+- **PostgreSQL**: More powerful than NoSQL for complex queries
+- **Supabase**: Built-in auth, real-time subscriptions, and REST API
+- **Row Level Security**: Database-level security policies
+- **Zustand**: Lightweight state management
+- **TypeScript**: Full type safety throughout the application
