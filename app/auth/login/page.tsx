@@ -17,7 +17,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
       router.push("/");
-    } catch (error) {
+    } catch {
       // Error is handled by the store
     }
   };
@@ -84,7 +84,7 @@ export default function LoginPage() {
               href="/auth/signup"
               className="text-indigo-600 hover:text-indigo-500"
             >
-              Don't have an account? Sign up
+              Don&apos;t have an account? Sign up
             </Link>
           </div>
         </form>

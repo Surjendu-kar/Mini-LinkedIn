@@ -37,7 +37,7 @@ export default function SignupPage() {
       );
       // After successful signup, redirect to login page
       router.push("/auth/login");
-    } catch (error) {
+    } catch {
       // Error is handled by the store
     }
   };
