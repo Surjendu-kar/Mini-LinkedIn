@@ -44,7 +44,7 @@ export default function Home() {
                 ></div>
                 <div className="px-4 pb-4">
                   <div className="relative -mt-8 mb-4">
-                    <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center border-4 border-white">
+                    <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center border-3 border-white">
                       <span className="text-xl font-bold text-gray-600">
                         {userProfile?.name?.charAt(0).toUpperCase()}
                       </span>
