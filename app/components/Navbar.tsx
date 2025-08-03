@@ -170,42 +170,91 @@ export default function Navbar() {
 
               {/* Profile Dropdown */}
               {showProfileMenu && (
-                <div className="absolute -right-60 top-full mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg pt-2 z-50 overflow-hidden">
-                  <div className="px-3 py-1 border-b border-gray-100">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                        <span className="text-lg font-bold text-gray-600">
+                <div className="absolute right-0 top-full mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                  {/* Profile Header */}
+                  <div className="p-2 border-b border-gray-200">
+                    <div className="flex items-start space-x-2">
+                      <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-2xl font-bold text-gray-600">
                           {userProfile?.name?.charAt(0).toUpperCase()}
                         </span>
                       </div>
-                      <div>
-                        <p className="font-semibold text-gray-900 text-sm">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-900 text-sm truncate capitalize">
                           {userProfile?.name}
-                        </p>
-                        <p className="text-xs text-gray-600">
+                        </h3>
+                        <p className="text-xs text-gray-600 mt-[1px] capitalize">
                           {userProfile?.bio}
                         </p>
                       </div>
                     </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex space-x-2 mt-2">
+                      <Link
+                        href={`/profile/${user.id}`}
+                        className="flex-1 px-4 py-1 border border-[#0A66C2] text-[#0A66C2] text-sm font-medium rounded-full text-center hover:bg-blue-50 transition-colors"
+                        onClick={() => setShowProfileMenu(false)}
+                      >
+                        View Profile
+                      </Link>
+                      <button className="flex-1 px-4 py-1 bg-[#0A66C2] text-white text-sm font-medium rounded-full hover:bg-[#084d94] transition-colors">
+                        Verify
+                      </button>
+                    </div>
                   </div>
 
-                  <Link
-                    href={`/profile/${user.id}`}
-                    className="block px-4 py-2 text-[13px] text-gray-700 hover:bg-gray-50"
-                    onClick={() => setShowProfileMenu(false)}
-                  >
-                    View Profile
-                  </Link>
+                  {/* Account Section */}
+                  <div className="">
+                    <h4 className="px-3 py-2 text-md font-semibold text-gray-900">
+                      Account
+                    </h4>
 
-                  <button
-                    onClick={() => {
-                      setShowProfileMenu(false);
-                      handleLogout();
-                    }}
-                    className="block w-full text-left px-4 py-2 text-[13px] text-gray-700 hover:bg-gray-50"
-                  >
-                    Sign Out
-                  </button>
+                    <button className="w-full px-3 py-1 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                      <span className="text-amber-500 mr-1">📦</span>
+                      Try Premium for ₹0
+                    </button>
+
+                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                      Settings & Privacy
+                    </button>
+
+                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                      Help
+                    </button>
+
+                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                      Language
+                    </button>
+                  </div>
+
+                  {/* Manage Section */}
+                  <div className=" border-t border-gray-200">
+                    <h4 className="px-3 py-1 text-md font-semibold text-gray-900 mt-1">
+                      Manage
+                    </h4>
+
+                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                      Posts & Activity
+                    </button>
+
+                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                      Job Posting Account
+                    </button>
+                  </div>
+
+                  {/* Sign Out */}
+                  <div className=" border-t border-gray-200">
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        handleLogout();
+                      }}
+                      className="w-full px-3 py-2 text-left text-sm text-gray-500 hover:bg-gray-50 font-medium  cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
