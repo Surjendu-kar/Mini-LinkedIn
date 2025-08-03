@@ -30,19 +30,19 @@ export default function PostCard({ post, showAuthor = true }: PostCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow p-4">
       {/* Post Header */}
       {showAuthor && (
         <div className="flex items-center mb-4">
           <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-            <span className="text-sm font-bold text-gray-600">
+            <span className="text-md font-bold text-gray-600 capitalize">
               {post.author_name.charAt(0).toUpperCase()}
             </span>
           </div>
           <div>
             <Link
               href={`/profile/${post.author_id}`}
-              className="font-semibold text-gray-900 hover:text-indigo-600 transition-colors"
+              className="font-semibold text-gray-900 hover:text-[#0A66C2] transition-colors capitalize"
             >
               {post.author_name}
             </Link>
@@ -68,7 +68,7 @@ export default function PostCard({ post, showAuthor = true }: PostCardProps) {
 
       {/* Post Actions */}
       <div className="flex items-center space-x-4 pt-4 border-t border-gray-100">
-        <button className="flex items-center space-x-2 text-gray-500 hover:text-indigo-600 transition-colors">
+        <button className="flex items-center space-x-2 text-gray-500 hover:text-[#0A66C2] transition-colors">
           <svg
             className="w-5 h-5"
             fill="none"
@@ -85,7 +85,7 @@ export default function PostCard({ post, showAuthor = true }: PostCardProps) {
           <span className="text-sm">Like</span>
         </button>
 
-        <button className="flex items-center space-x-2 text-gray-500 hover:text-indigo-600 transition-colors">
+        <button className="flex items-center space-x-2 text-gray-500 hover:text-[#0A66C2] transition-colors">
           <svg
             className="w-5 h-5"
             fill="none"
@@ -102,7 +102,7 @@ export default function PostCard({ post, showAuthor = true }: PostCardProps) {
           <span className="text-sm">Comment</span>
         </button>
 
-        <button className="flex items-center space-x-2 text-gray-500 hover:text-indigo-600 transition-colors">
+        <button className="flex items-center space-x-2 text-gray-500 hover:text-[#0A66C2] transition-colors">
           <svg
             className="w-5 h-5"
             fill="none"

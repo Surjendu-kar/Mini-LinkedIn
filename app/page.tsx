@@ -22,14 +22,6 @@ export default function Home() {
     setFeedKey((prev) => prev + 1);
   };
 
-  if (initializing) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
-    );
-  }
-
   if (!user) {
     router.push("/auth/login");
     return null;
@@ -258,7 +250,7 @@ export default function Home() {
               </div>
               <div className="flex items-center">
                 <div
-                  className="w-18 h-10 rounded-full flex items-center justify-center mr-3"
+                  className="w-17 h-10 rounded-full flex items-center justify-center mr-3"
                   style={{ backgroundColor: "#e6f3ff" }}
                 >
                   <span className="font-bold" style={{ color: "#0A66C2" }}>
@@ -266,7 +258,7 @@ export default function Home() {
                   </span>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-gray-900 capitalize">
                     {userProfile?.name}, explore relevant opportunities with
                     Hempel A/S
                   </p>

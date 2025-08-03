@@ -149,7 +149,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
           className="fixed inset-0 bg-opacity-20 flex items-center justify-center z-50 p-4"
           style={{ backdropFilter: "blur(2px)" }}
         >
-          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-md">
+          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b">
               <div className="flex items-center space-x-3">
@@ -159,7 +159,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 text-lg">
+                  <h3 className="font-semibold text-gray-900 text-lg capitalize ml-1">
                     {userProfile?.name}
                   </h3>
                   <select className="text-sm text-gray-500 border-none bg-transparent focus:outline-none">
@@ -171,7 +171,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
               </div>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-all duration-200"
+                className="cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-all duration-200"
               >
                 <svg
                   className="w-6 h-6"

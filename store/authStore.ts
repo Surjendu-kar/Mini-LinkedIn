@@ -142,25 +142,42 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     // Listen for auth changes (only set up once)
     supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", event, session?.user?.id);
-
       if (event === "SIGNED_OUT") {
         set({ user: null, userProfile: null });
         return;
       }
 
       if (session?.user) {
-        // Get user profile
-        const { data: profile } = await supabase
+        // Set user immediately, then load profile
+        set({
+          user: session.user,
+          userProfile: null, // Will be updated when profile loads
+        });
+
+        // Get user profile with timeout
+        const profilePromise = supabase
           .from("users")
           .select("*")
           .eq("id", session.user.id)
           .single();
 
-        set({
-          user: session.user,
-          userProfile: profile,
-        });
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Profile fetch timeout")), 3000)
+        );
+
+        try {
+          const { data: profile, error: profileError } = await Promise.race([
+            profilePromise,
+            timeoutPromise,
+          ]);
+
+          if (!profileError && profile) {
+            // Update profile separately
+            set({ userProfile: profile });
+          }
+        } catch {
+          // Continue without profile - user is still authenticated
+        }
       } else {
         set({ user: null, userProfile: null });
       }
@@ -170,8 +187,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   initializeAuth: async () => {
-    // Prevent multiple initializations
     const currentState = get();
+
+    // Prevent multiple initializations
     if (!currentState.initializing) {
       return;
     }
@@ -187,33 +205,46 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       } = await supabase.auth.getSession();
 
       if (error) {
-        console.error("Session error:", error);
         set({ user: null, userProfile: null, initializing: false });
         return;
       }
 
       if (session?.user) {
-        // Get user profile
-        const { data: profile, error: profileError } = await supabase
+        // Set user and complete initialization immediately
+        set({
+          user: session.user,
+          userProfile: null, // Will be loaded separately
+          initializing: false,
+        });
+
+        // Load profile separately (non-blocking)
+        const profilePromise = supabase
           .from("users")
           .select("*")
           .eq("id", session.user.id)
           .single();
 
-        if (profileError) {
-          console.error("Profile fetch error:", profileError);
-        }
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Profile fetch timeout")), 3000)
+        );
 
-        set({
-          user: session.user,
-          userProfile: profile,
-          initializing: false,
-        });
+        try {
+          const { data: profile, error: profileError } = await Promise.race([
+            profilePromise,
+            timeoutPromise,
+          ]);
+
+          if (!profileError && profile) {
+            // Update profile after initialization is complete
+            set({ userProfile: profile });
+          }
+        } catch {
+          // Continue without profile - user is still authenticated
+        }
       } else {
         set({ user: null, userProfile: null, initializing: false });
       }
-    } catch (error) {
-      console.error("Auth initialization error:", error);
+    } catch {
       set({ user: null, userProfile: null, initializing: false });
     }
   },
