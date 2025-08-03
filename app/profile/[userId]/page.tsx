@@ -10,7 +10,7 @@ import PostCard from "@/app/components/PostCard";
 export default function ProfilePage() {
   const params = useParams();
   const router = useRouter();
-  const { user, initializing, initializeAuth } = useAuthStore();
+  const { user, initializing } = useAuthStore();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,10 +56,6 @@ export default function ProfilePage() {
       setLoading(false);
     }
   }, [userId]);
-
-  useEffect(() => {
-    initializeAuth();
-  }, [initializeAuth]);
 
   useEffect(() => {
     if (!initializing) {

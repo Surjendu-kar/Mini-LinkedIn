@@ -8,6 +8,7 @@ interface AuthState {
   initializing: boolean; // For auth state initialization
   loading: boolean; // For form submissions
   error: string | null;
+  authListenerSetup: boolean; // Track if auth listener is set up
 
   // Actions
   login: (email: string, password: string) => Promise<void>;
@@ -20,6 +21,7 @@ interface AuthState {
   logout: () => Promise<void>;
   clearError: () => void;
   initializeAuth: () => void;
+  setupAuthListener: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -28,6 +30,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   initializing: true,
   loading: false,
   error: null,
+  authListenerSetup: false,
 
   login: async (email: string, password: string) => {
     try {
@@ -131,6 +134,41 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   clearError: () => set({ error: null }),
 
+  setupAuthListener: () => {
+    const currentState = get();
+    if (currentState.authListenerSetup) {
+      return;
+    }
+
+    // Listen for auth changes (only set up once)
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event, session?.user?.id);
+
+      if (event === "SIGNED_OUT") {
+        set({ user: null, userProfile: null });
+        return;
+      }
+
+      if (session?.user) {
+        // Get user profile
+        const { data: profile } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+
+        set({
+          user: session.user,
+          userProfile: profile,
+        });
+      } else {
+        set({ user: null, userProfile: null });
+      }
+    });
+
+    set({ authListenerSetup: true });
+  },
+
   initializeAuth: async () => {
     // Prevent multiple initializations
     const currentState = get();
@@ -139,6 +177,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
 
     try {
+      // Set up auth listener first
+      get().setupAuthListener();
+
       // Get initial session
       const {
         data: { session },
@@ -171,32 +212,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       } else {
         set({ user: null, userProfile: null, initializing: false });
       }
-
-      // Listen for auth changes (only set up once)
-      supabase.auth.onAuthStateChange(async (event, session) => {
-        console.log("Auth state changed:", event, session?.user?.id);
-
-        if (event === "SIGNED_OUT") {
-          set({ user: null, userProfile: null });
-          return;
-        }
-
-        if (session?.user) {
-          // Get user profile
-          const { data: profile } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
-
-          set({
-            user: session.user,
-            userProfile: profile,
-          });
-        } else {
-          set({ user: null, userProfile: null });
-        }
-      });
     } catch (error) {
       console.error("Auth initialization error:", error);
       set({ user: null, userProfile: null, initializing: false });

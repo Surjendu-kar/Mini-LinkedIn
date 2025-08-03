@@ -7,13 +7,15 @@ import PostForm from "./components/PostForm";
 import PostsFeed from "./components/PostsFeed";
 
 export default function Home() {
-  const { user, userProfile, initializing, initializeAuth } = useAuthStore();
+  const { user, userProfile, initializing } = useAuthStore();
   const router = useRouter();
   const [feedKey, setFeedKey] = useState(0);
 
   useEffect(() => {
-    initializeAuth();
-  }, [initializeAuth]);
+    if (!initializing && !user) {
+      router.push("/auth/login");
+    }
+  }, [initializing, user, router]);
 
   const handlePostCreated = () => {
     // Force feed to refresh by changing key

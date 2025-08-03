@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ export default function Navbar() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = async () => {
     try {
@@ -26,6 +27,26 @@ export default function Navbar() {
     // TODO: Implement search functionality
     console.log("Search:", searchQuery);
   };
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowProfileMenu(false);
+      }
+    };
+
+    if (showProfileMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProfileMenu]);
 
   if (!user) return null;
 
@@ -74,7 +95,7 @@ export default function Navbar() {
           </div>
 
           {/* Right Section - Navigation Icons */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-7">
             {/* Home */}
             <Link
               href="/"
@@ -144,7 +165,7 @@ export default function Navbar() {
             </button>
 
             {/* Profile Menu */}
-            <div className="relative">
+            <div className="relative" ref={profileMenuRef}>
               <button
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
                 className="cursor-pointer flex flex-col items-center text-gray-600 hover:text-gray-900 transition-colors group"
@@ -206,24 +227,24 @@ export default function Navbar() {
 
                   {/* Account Section */}
                   <div className="">
-                    <h4 className="px-3 py-2 text-md font-semibold text-gray-900">
+                    <h4 className="px-3 pt-2 pb-1 text-md font-semibold text-gray-900">
                       Account
                     </h4>
 
-                    <button className="w-full px-3 py-1 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                    <button className="w-full px-3 py-[5px] text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                       <span className="text-amber-500 mr-1">📦</span>
                       Try Premium for ₹0
                     </button>
 
-                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                    <button className="w-full px-3 py-[5px] text-left text-sm text-gray-500 hover:bg-gray-50">
                       Settings & Privacy
                     </button>
 
-                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                    <button className="w-full px-3 py-[5px] text-left text-sm text-gray-500 hover:bg-gray-50">
                       Help
                     </button>
 
-                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                    <button className="w-full px-3 py-[5px] text-left text-sm text-gray-500 hover:bg-gray-50">
                       Language
                     </button>
                   </div>
@@ -234,11 +255,11 @@ export default function Navbar() {
                       Manage
                     </h4>
 
-                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                    <button className="w-full px-3 py-[5px] text-left text-sm text-gray-500 hover:bg-gray-50">
                       Posts & Activity
                     </button>
 
-                    <button className="w-full px-3 py-1 text-left text-sm text-gray-500 hover:bg-gray-50">
+                    <button className="w-full px-3 py-[5px] text-left text-sm text-gray-500 hover:bg-gray-50">
                       Job Posting Account
                     </button>
                   </div>
@@ -284,9 +305,40 @@ export default function Navbar() {
             {/* Try Premium */}
             <Link
               href="#"
-              className="text-xs font-medium text-amber-600 hover:text-amber-700 underline"
+              className="flex flex-col items-center text-amber-600 hover:text-amber-700 transition-colors group"
             >
-              Try Premium for ₹0
+              <svg
+                className="h-6 w-6 mb-1"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <clipPath id="roundedSquare">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  </clipPath>
+                </defs>
+
+                {/* Light golden background (right side) */}
+                <rect
+                  x="2"
+                  y="2"
+                  width="20"
+                  height="20"
+                  rx="5"
+                  ry="5"
+                  fill="#F8C77E"
+                />
+
+                {/* Dark golden triangle (left side) */}
+                <path
+                  d="M2 2 L2 22 L22 22 Z"
+                  fill="#E7A33E"
+                  clipPath="url(#roundedSquare)"
+                />
+              </svg>
+              <span className="text-xs font-medium">
+                Try Premium for ₹0
+              </span>
             </Link>
           </div>
         </div>
