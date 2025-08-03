@@ -82,7 +82,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
   return (
     <>
       {/* Collapsed "Start a post" view */}
-      <div className="bg-white rounded-lg shadow p-4">
+      <div className="bg-white rounded-lg shadow px-4 pt-4 pb-1">
         <div className="flex items-center space-x-3">
           <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
             <span className="text-lg font-bold text-gray-600">
@@ -97,10 +97,10 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
           </button>
         </div>
 
-        <div className="flex justify-between mt-4 px-2">
+        <div className="flex justify-around mt-2 px-2">
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-4 py-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <svg
               className="w-5 h-5 text-green-600"
@@ -114,7 +114,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
 
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-4 py-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -129,7 +129,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
 
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-4 py-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <svg
               className="w-5 h-5 text-orange-500"
