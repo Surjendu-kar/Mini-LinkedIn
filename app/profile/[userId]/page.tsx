@@ -4,8 +4,8 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { supabase, UserProfile, Post } from "@/lib/supabase";
-import ProfileCard from "@/app/components/ProfileCard";
-import PostCard from "@/app/components/PostCard";
+import ProfileCard from "@/components/ProfileCard";
+import PostCard from "@/components/PostCard";
 
 export default function ProfilePage() {
   const params = useParams();

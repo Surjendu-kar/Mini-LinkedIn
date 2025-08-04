@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import LayoutWrapper from "./components/LayoutWrapper";
+import LayoutWrapper from "../components/LayoutWrapper";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <LayoutWrapper>{children}</LayoutWrapper>
         <Toaster
-          position="top-center"
+          position="bottom-right"
           toastOptions={{
             duration: 4000,
             style: {
