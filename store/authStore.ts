@@ -22,6 +22,7 @@ interface AuthState {
   clearError: () => void;
   initializeAuth: () => void;
   setupAuthListener: () => void;
+  updateProfile: (updatedProfile: UserProfile) => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -134,6 +135,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   clearError: () => set({ error: null }),
 
+  updateProfile: (updatedProfile: UserProfile) => {
+    set({ userProfile: updatedProfile });
+  },
+
   setupAuthListener: () => {
     const currentState = get();
     if (currentState.authListenerSetup) {
@@ -148,35 +153,46 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
 
       if (session?.user) {
-        // Set user immediately, then load profile
+        const currentState = get();
+        // Set user immediately, preserve profile if it's for the same user
         set({
           user: session.user,
-          userProfile: null, // Will be updated when profile loads
+          userProfile:
+            currentState.userProfile?.id === session.user.id
+              ? currentState.userProfile
+              : null, // Will be updated when profile loads
         });
 
-        // Get user profile with timeout
-        const profilePromise = supabase
-          .from("users")
-          .select("*")
-          .eq("id", session.user.id)
-          .single();
+        // Only fetch profile if we don't already have one for this user
+        const updatedState = get();
+        if (
+          !updatedState.userProfile ||
+          updatedState.userProfile.id !== session.user.id
+        ) {
+          // Get user profile with timeout
+          const profilePromise = supabase
+            .from("users")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
 
-        const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Profile fetch timeout")), 3000)
-        );
+          const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error("Profile fetch timeout")), 3000)
+          );
 
-        try {
-          const { data: profile, error: profileError } = await Promise.race([
-            profilePromise,
-            timeoutPromise,
-          ]);
+          try {
+            const { data: profile, error: profileError } = await Promise.race([
+              profilePromise,
+              timeoutPromise,
+            ]);
 
-          if (!profileError && profile) {
-            // Update profile separately
-            set({ userProfile: profile });
+            if (!profileError && profile) {
+              // Update profile separately
+              set({ userProfile: profile });
+            }
+          } catch {
+            // Continue without profile - user is still authenticated
           }
-        } catch {
-          // Continue without profile - user is still authenticated
         }
       } else {
         set({ user: null, userProfile: null });
