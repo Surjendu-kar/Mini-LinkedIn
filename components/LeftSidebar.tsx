@@ -1,12 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useAuthStore } from "@/store/authStore";
 
 export default function LeftSidebar() {
-  const { userProfile } = useAuthStore();
+  const { user, userProfile } = useAuthStore();
 
   return (
-    <div className="sticky top-20">
+    <div className="lg:sticky lg:top-20">
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {/* Profile Header */}
         <div
@@ -23,12 +24,14 @@ export default function LeftSidebar() {
               </span>
             </div>
           </div>
-          <h3 className="font-semibold text-gray-900 text-lg mb-1">
-            {userProfile?.name}
-          </h3>
-          <p className="text-sm text-gray-600 mb-3">
-            {userProfile?.bio || "Professional"}
-          </p>
+          <Link href={`/profile/${user?.id}`}>
+            <h3 className="font-semibold text-gray-900 text-lg mb-1 capitalize hover:text-[#0A66C2] transition-colors">
+              {userProfile?.name}
+            </h3>
+            <p className="text-sm text-gray-600 mb-1 capitalize hover:text-gray-800 transition-colors">
+              {userProfile?.bio || "Professional"}
+            </p>
+          </Link>
           <div className="border-t pt-3">
             <div className="flex justify-between text-xs text-gray-500 mb-2">
               <span>Profile viewers</span>
