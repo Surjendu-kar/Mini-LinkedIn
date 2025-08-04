@@ -13,7 +13,8 @@ export default function PostsFeed() {
     try {
       setError(null);
 
-      const { data, error: postsError } = await supabase
+      // First get all posts
+      const { data: postsData, error: postsError } = await supabase
         .from("posts")
         .select("*")
         .order("created_at", { ascending: false });
@@ -22,7 +23,29 @@ export default function PostsFeed() {
         throw postsError;
       }
 
-      setPosts(data || []);
+      // Then get user bios for all authors
+      const authorIds = [
+        ...new Set(postsData?.map((post) => post.author_id) || []),
+      ];
+      const { data: usersData, error: usersError } = await supabase
+        .from("users")
+        .select("id, bio")
+        .in("id", authorIds);
+
+      if (usersError) {
+        console.warn("Failed to load user bios:", usersError);
+      }
+
+      // Combine posts with user bios
+      const postsWithBios =
+        postsData?.map((post) => ({
+          ...post,
+          users: usersData?.find((user) => user.id === post.author_id) || {
+            bio: "",
+          },
+        })) || [];
+
+      setPosts(postsWithBios);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to load posts";
@@ -145,7 +168,7 @@ export default function PostsFeed() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       {posts.map((post) => (
         <PostCard key={post.id} post={post} showAuthor={true} />
       ))}

@@ -17,7 +17,7 @@ export default function CenterFeed() {
       <PostForm onPostCreated={handlePostCreated} />
 
       {/* Posts Feed */}
-      <div className="mt-6">
+      <div className="mt-4 lg:mt-6">
         <PostsFeed key={feedKey} />
       </div>
     </div>

@@ -97,7 +97,7 @@ export default function LayoutWrapper({
   return (
     <>
       {!isAuthPage && <Navbar />}
-      <div className={!isAuthPage ? "pt-14" : ""}>{children}</div>
+      <div className={!isAuthPage ? "pt-10 lg:pt-14" : ""}>{children}</div>
     </>
   );
 }

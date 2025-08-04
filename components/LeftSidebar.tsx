@@ -59,7 +59,7 @@ export default function LeftSidebar() {
       </div>
 
       {/* Quick Links */}
-      <div className="bg-white rounded-lg shadow mt-4 p-4">
+      <div className="bg-white rounded-lg shadow mt-4 p-4 hidden lg:block">
         <div className="space-y-3">
           <div className="flex items-center text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
             <span className="mr-3">📋</span>

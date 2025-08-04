@@ -22,4 +22,7 @@ export interface Post {
   author_id: string;
   author_name: string;
   created_at: string;
+  users?: {
+    bio: string;
+  };
 }

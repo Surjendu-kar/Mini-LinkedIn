@@ -104,23 +104,23 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
       {/* Collapsed "Start a post" view */}
       <div className="bg-white rounded-lg shadow px-4 pt-4 pb-1">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-            <span className="text-lg font-bold text-gray-600">
+          <div className="w-8 h-8 lg:w-12 lg:h-12 bg-gray-300 rounded-full flex items-center justify-center">
+            <span className="text-md lg:text-lg font-bold text-gray-600">
               {userProfile?.name?.charAt(0).toUpperCase()}
             </span>
           </div>
           <button
             onClick={() => setShowModal(true)}
-            className="flex-1 text-left px-4 py-3 border border-gray-300 rounded-full text-gray-500 hover:bg-gray-50 transition-colors"
+            className="flex-1 text-left px-4 lg:py-3 py-2 border border-gray-300 rounded-full text-gray-500 hover:bg-gray-50 transition-colors"
           >
             Start a post
           </button>
         </div>
 
-        <div className="flex justify-around mt-2 px-2">
+        <div className="flex justify-around mt-2">
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center space-x-2 px-4 py-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-2 py-3 lg:p-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <svg
               className="w-5 h-5 text-green-600"
@@ -134,7 +134,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
 
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center space-x-2 px-4 py-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-2 py-3 lg:p-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -149,7 +149,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
 
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center space-x-2 px-4 py-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-2 py-3 lg:p-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <svg
               className="w-5 h-5 text-orange-500"
@@ -174,7 +174,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
             className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200"
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b">
+            <div className="flex items-center justify-between p-4 lg:p-6 border-b">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
                   <span className="text-lg font-bold text-gray-600">
@@ -213,7 +213,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
             </div>
 
             {/* Modal Content */}
-            <form onSubmit={handleModalSubmit} className="p-6">
+            <form onSubmit={handleModalSubmit} className="p-4 lg:p-6">
               {/* Error Message */}
               {error && (
                 <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">

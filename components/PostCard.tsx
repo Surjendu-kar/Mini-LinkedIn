@@ -33,22 +33,29 @@ export default function PostCard({ post, showAuthor = true }: PostCardProps) {
     <div className="bg-white rounded-lg shadow p-4">
       {/* Post Header */}
       {showAuthor && (
-        <div className="flex items-center mb-4">
-          <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+        <div className="flex items-center mb-2 lg:mb-4">
+          <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
             <span className="text-md font-bold text-gray-600 capitalize">
               {post.author_name.charAt(0).toUpperCase()}
             </span>
           </div>
-          <div>
-            <Link
-              href={`/profile/${post.author_id}`}
-              className="font-semibold text-gray-900 hover:text-[#0A66C2] transition-colors capitalize"
-            >
-              {post.author_name}
-            </Link>
-            <p className="text-sm text-gray-500">
-              {formatDate(post.created_at)}
-            </p>
+          <div className="flex flex-1 justify-between">
+            <div>
+              <Link
+                href={`/profile/${post.author_id}`}
+                className="font-semibold text-gray-900 hover:text-[#0A66C2] transition-colors capitalize"
+              >
+                {post.author_name}
+              </Link>
+              <p className="text-sm text-gray-500 capitalize">
+                {post.users?.bio || "Professional"}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">
+                {formatDate(post.created_at)}
+              </p>
+            </div>
           </div>
         </div>
       )}
