@@ -31,6 +31,11 @@ export default function LayoutWrapper({
     };
   }, [initializeAuth]);
 
+  // Reset scroll position when navigating to a new page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   // Don't show navbar on auth pages
   const isAuthPage = pathname?.startsWith("/auth");
 
