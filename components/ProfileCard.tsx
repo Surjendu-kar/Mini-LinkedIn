@@ -18,7 +18,6 @@ export default function ProfileCard({
 }: ProfileCardProps) {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({
-    name: profile.name,
     bio: profile.bio,
   });
   const [loading, setLoading] = useState(false);
@@ -37,12 +36,12 @@ export default function ProfileCard({
     if (!user) return;
 
     setError(null);
+    setLoading(true);
 
     const updateProfilePromise = async () => {
       const { data, error: updateError } = await supabase
         .from("users")
         .update({
-          name: editForm.name.trim(),
           bio: editForm.bio.trim(),
         })
         .eq("id", user.id)
@@ -56,7 +55,6 @@ export default function ProfileCard({
 
       // Also update the local profile state to ensure immediate UI update
       setEditForm({
-        name: data.name,
         bio: data.bio,
       });
 
@@ -66,21 +64,26 @@ export default function ProfileCard({
       }
 
       setShowEditModal(false);
+      setLoading(false);
       return data;
     };
 
     toast.promise(updateProfilePromise(), {
       loading: "Saving profile...",
       success: <b>Profile updated successfully!</b>,
-      error: (err) => (
-        <b>{err instanceof Error ? err.message : "Failed to update profile"}</b>
-      ),
+      error: (err) => {
+        setLoading(false);
+        return (
+          <b>
+            {err instanceof Error ? err.message : "Failed to update profile"}
+          </b>
+        );
+      },
     });
   };
 
   const handleEditCancel = () => {
     setEditForm({
-      name: profile.name,
       bio: profile.bio,
     });
     setError(null);
@@ -187,28 +190,6 @@ export default function ProfileCard({
               )}
 
               <div className="space-y-4">
-                {/* Name Field */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    required
-                    value={editForm.name}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, name: e.target.value })
-                    }
-                    className="w-full px-3 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent"
-                    placeholder="Enter your name"
-                    disabled={loading}
-                  />
-                </div>
-
                 {/* Bio Field */}
                 <div>
                   <label
@@ -247,7 +228,7 @@ export default function ProfileCard({
                 </button>
                 <button
                   type="submit"
-                  disabled={loading || !editForm.name.trim()}
+                  disabled={loading}
                   className="cursor-pointer px-4 py-2 bg-[#0A66C2] text-white rounded-md hover:bg-[#084d94] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? "Saving..." : "Save Changes"}

@@ -31,7 +31,7 @@ A professional social networking platform built with modern web technologies, fe
 
 - **User Registration**: Email & password with profile creation
 - **User Login**: Secure authentication with session management
-- **Profile Management**: Update name and bio with real-time validation
+- **Profile Management**: Update bio with real-time validation
 - **Toast Notifications**: Success/error feedback for all auth operations
 
 ### 📝 Post Management
@@ -44,7 +44,7 @@ A professional social networking platform built with modern web technologies, fe
 ### 👤 Profile System
 
 - **User Profiles**: Dedicated profile pages showing user info and posts
-- **Profile Editing**: Modal-based editing with toast feedback
+- **Profile Editing**: Modal-based bio editing with toast feedback
 - **Post Creation**: Integrated "Create a post" button on profile pages
 - **Activity Tracking**: Display user's post count and activity
 
@@ -183,7 +183,7 @@ yarn start
 ## 🎯 Key Features Implemented
 
 ✅ **User Authentication** - Register/Login with email & password  
-✅ **User Profiles** - Name, email, bio with editing capabilities  
+✅ **User Profiles** - Name, email, bio with bio editing capabilities  
 ✅ **Public Post Feed** - Create, read, display text posts  
 ✅ **Home Feed** - Posts with author names, bios, and timestamps  
 ✅ **Profile Pages** - View user profiles and their posts  
@@ -217,11 +217,10 @@ yarn start
 - **Error Handling**: User-friendly error messages
 - **Accessibility**: Keyboard navigation and screen reader support
 
-
 ## 🏆 Extra Features (Beyond Requirements)
 
 - **Toast Notifications**: Real-time user feedback system
-- **Profile Editing**: In-app profile management
+- **Profile Editing**: In-app bio management
 - **Real-time Updates**: Live post synchronization
 - **Professional UI**: LinkedIn-inspired design system
 - **Loading States**: Enhanced user experience
