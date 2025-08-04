@@ -50,20 +50,20 @@ export default function LoginPage() {
 
       {/* Main Content */}
       <div className="flex items-center justify-center my-auto">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-sm lg:max-w-md m-4 lg:m-0">
           {/* Sign in Card */}
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8">
+          <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 lg:p-8">
             <div className="text-center mb-6">
-              <h1 className="text-3xl font-normal text-gray-900 mb-2">
+              <h1 className="text-2xl lg:text-3xl font-normal text-gray-900 mb-2">
                 Sign in
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm lg:text-md">
                 Stay updated on your professional world
               </p>
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div className="space-y-4">
+              <div className="space-y-3 lg:space-y-4">
                 {/* Email Input */}
                 <div>
                   <input
@@ -114,14 +114,14 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="cursor-pointer w-full bg-[#0A66C2] hover:bg-[#084d94] text-white font-medium py-3 px-4 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+                className="cursor-pointer text-sm lg:text-md  w-full bg-[#0A66C2] hover:bg-[#084d94] text-white font-medium py-3 px-4 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-3 lg:mt-4"
               >
                 {loading ? "Signing in..." : "Sign in"}
               </button>
             </form>
 
             {/* Divider - Outside form */}
-            <div className="relative my-4">
+            <div className="relative my-2 lg:my-4">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300"></div>
               </div>
@@ -142,13 +142,13 @@ export default function LoginPage() {
                 height={20}
                 className="w-5 h-5"
               />
-              <span>Sign in with Google</span>
+              <span className="text-sm lg:text-md">Sign in with Google</span>
             </button>
           </div>
 
           {/* New to LinkedIn - Outside the card */}
-          <div className="text-center mt-6">
-            <span className="text-gray-600">New to LinkedIn? </span>
+          <div className="text-center mt-6 lg:text-md text-sm">
+            <span className="text-gray-600 ">New to LinkedIn? </span>
             <Link
               href="/auth/signup"
               className="text-[#0A66C2] hover:text-[#084d94] font-medium"
@@ -160,7 +160,7 @@ export default function LoginPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-6 mt-8">
+      <footer className="bg-white border-t border-gray-200 py-6 lg:mt-8 mt-0">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-wrap items-center justify-between text-sm text-gray-600">
             <div className="flex items-center space-x-2 mb-4 lg:mb-0">
@@ -173,7 +173,7 @@ export default function LoginPage() {
               />
               <span className="text-gray-600">© 2025</span>
             </div>
-            <div className="flex flex-wrap gap-4 text-xs">
+            <div className="flex flex-wrap gap-2 lg:gap-4 text-xs">
               {footerLinks.map((link, index) => (
                 <a key={index} href="#" className="hover:text-[#0A66C2]">
                   {link}
