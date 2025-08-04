@@ -6,6 +6,7 @@ import { useAuthStore } from "@/store/authStore";
 import { supabase, UserProfile, Post } from "@/lib/supabase";
 import ProfileCard from "@/components/ProfileCard";
 import PostCard from "@/components/PostCard";
+import PostModal from "@/components/PostModal";
 
 export default function ProfilePage() {
   const params = useParams();
@@ -15,8 +16,14 @@ export default function ProfilePage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showPostModal, setShowPostModal] = useState(false);
 
   const userId = params.userId as string;
+
+  const handlePostCreated = () => {
+    loadProfile(); // Refresh the profile and posts
+    setShowPostModal(false);
+  };
 
   const loadProfile = useCallback(async () => {
     try {
@@ -126,6 +133,7 @@ export default function ProfilePage() {
                 <div className="flex items-center space-x-3">
                   {isOwnProfile && (
                     <button
+                      onClick={() => setShowPostModal(true)}
                       className="px-4 py-2 border rounded-full text-sm font-medium transition-colors"
                       style={{
                         borderColor: "#0A66C2",
@@ -327,6 +335,7 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-3">
                 {isOwnProfile && (
                   <button
+                    onClick={() => setShowPostModal(true)}
                     className="px-4 py-2 border rounded-full text-sm font-medium transition-colors"
                     style={{
                       borderColor: "#0A66C2",
@@ -396,6 +405,13 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Post Modal */}
+      <PostModal
+        isOpen={showPostModal}
+        onClose={() => setShowPostModal(false)}
+        onPostCreated={handlePostCreated}
+      />
     </div>
   );
 }

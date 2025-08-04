@@ -20,17 +20,23 @@ mini-linkedin/
 │   ├── profile/
 │   │   └── [userId]/
 │   │       └── page.tsx
-│   ├── components/
-│   │   ├── PostCard.tsx
-│   │   ├── PostForm.tsx
-│   │   ├── ProfileCard.tsx
-│   │   └── Navbar.tsx
-│   ├── lib/
-│   │   └── supabase.ts
-│   ├── store/
-│   │   └── authStore.ts
 │   ├── layout.tsx
 │   └── page.tsx (Home/Feed)
+├── components/
+│   ├── PostCard.tsx
+│   ├── PostForm.tsx
+│   ├── PostModal.tsx (Reusable)
+│   ├── PostsFeed.tsx
+│   ├── ProfileCard.tsx
+│   ├── LeftSidebar.tsx
+│   ├── CenterFeed.tsx
+│   ├── RightSidebar.tsx
+│   ├── LayoutWrapper.tsx
+│   └── Navbar.tsx
+├── lib/
+│   └── supabase.ts
+├── store/
+│   └── authStore.ts
 ├── public/
 └── README.md
 ```
@@ -86,10 +92,13 @@ mini-linkedin/
 
 8. **Post Creation** ✅ COMPLETED
 
-   - `components/PostForm.tsx` - Create new posts with rich UI
+   - `components/PostForm.tsx` - Create new posts with rich UI from home feed
+   - `components/PostModal.tsx` - Reusable post creation modal component
    - Store posts in PostgreSQL with author info and timestamps
    - Real-time character count and keyboard shortcuts
    - Modal-based post creation with click-outside functionality to close
+   - Post creation available from both home feed and profile page via "Create a post" button
+   - Success toast notification after post creation: "Post shared successfully!"
 
 9. **Post Display** ✅ COMPLETED
 
@@ -101,6 +110,8 @@ mini-linkedin/
     - Link posts to user profiles
     - Display user's posts on their profile page
     - Real-time updates using Supabase subscriptions
+    - Profile page integration with "Create a post" button for seamless posting
+    - Automatic post refresh after creation from profile page
 
 ### Phase 4: Navigation & Layout (Priority 4) ✅ COMPLETED
 
@@ -197,7 +208,12 @@ CREATE TABLE posts (
      - **Success**: "Profile updated successfully!" with green checkmark
      - **Error**: Specific error message with red X icon
 
-3. **Toast Configuration**
+3. **Post Creation Toasts**
+
+   - **Post Success**: "Post shared successfully!" with green success icon
+   - **Available from**: Both home feed and profile page post creation
+
+4. **Toast Configuration**
    - **Position**: Top-right corner for non-intrusive experience
    - **Duration**: 4 seconds for optimal readability
    - **Styling**: LinkedIn-themed with professional appearance
@@ -236,12 +252,13 @@ CREATE TABLE posts (
 - PostgreSQL database with proper schema
 - Row Level Security policies configured
 - Zustand state management integrated
-- Post creation and display system working
-- User profile pages with posts
+- Post creation and display system working from both home feed and profile pages
+- User profile pages with posts and integrated post creation
 - Professional LinkedIn-style navigation bar with smooth animated transitions
 - Enhanced UX with click-outside functionality and scroll reset
 - Modal interactions with proper event handling
 - React Hot Toast integration for comprehensive user feedback system
+- Reusable component architecture with modular design
 
 ## Next Steps
 
