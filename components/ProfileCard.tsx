@@ -93,7 +93,7 @@ export default function ProfileCard({
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       {/* Header Background */}
-      <div className="h-32 bg-gradient-to-r from-[#0A66C2] to-[#084d94] relative">
+      <div className="h-28 lg:h-32 bg-gradient-to-r from-[#0A66C2] to-[#084d94] relative">
         {/* Edit Icon - Only show for profile owner */}
         {isOwnProfile && (
           <button
@@ -118,12 +118,12 @@ export default function ProfileCard({
       </div>
 
       {/* Profile Content */}
-      <div className="px-6 pb-6">
+      <div className="px-4 pb-4 lg:px-6 lg:pb-6">
         {/* Profile Picture Placeholder */}
         <div className="relative -mt-16 mb-4">
-          <div className="w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
-            <div className="w-30 h-30 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-5xl font-bold text-gray-600">
+          <div className="w-28 h-28 lg:w-32 lg:h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+            <div className="w-26 h-26 lg:w-30 lg:h-30 bg-gray-300 rounded-full flex items-center justify-center">
+              <span className="text-4xl lg:text-5xl font-bold text-gray-600">
                 {profile.name.charAt(0).toUpperCase()}
               </span>
             </div>
@@ -131,19 +131,21 @@ export default function ProfileCard({
         </div>
 
         {/* Profile Info */}
-        <div className="space-y-2">
+        <div className="space-y-1">
           <div>
             {profile.name && (
-              <h1 className="text-2xl font-semibold text-gray-900">
+              <h1 className="text-2xl font-semibold text-gray-900 capitalize">
                 {profile.name}
               </h1>
             )}
+          </div>
+          <div>
             {profile.bio && (
-              <div className="flex justify-between items-start">
-                <p className="text-gray-700 leading-relaxed flex-1">
+              <div className="space-y-2">
+                <p className="text-sm lg:text-md text-gray-700 leading-relaxed">
                   {profile.bio}
                 </p>
-                <p className="text-sm text-gray-500 ml-4 whitespace-nowrap">
+                <p className="text-xs lg:text-sm text-gray-500">
                   {formatDate(profile.created_at)} joined
                 </p>
               </div>

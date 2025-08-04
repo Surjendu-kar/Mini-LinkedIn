@@ -48,7 +48,11 @@ export default function PostCard({ post, showAuthor = true }: PostCardProps) {
                 {post.author_name}
               </Link>
               <p className="text-sm text-gray-500 capitalize">
-                {post.users?.bio || "Professional"}
+                {post.users?.bio
+                  ? post.users.bio.length > 50
+                    ? `${post.users.bio.substring(0, 50)}...`
+                    : post.users.bio
+                  : "Professional"}
               </p>
             </div>
             <div>
