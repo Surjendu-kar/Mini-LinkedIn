@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <LayoutWrapper>{children}</LayoutWrapper>
         <Toaster
-          position="bottom-right"
+          position="top-right"
           toastOptions={{
             duration: 4000,
             style: {

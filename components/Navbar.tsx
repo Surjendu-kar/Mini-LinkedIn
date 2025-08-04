@@ -351,13 +351,13 @@ export default function Navbar() {
                   {/* Profile Header */}
                   <div className="p-2 border-b border-gray-200">
                     <div className="flex items-start space-x-2">
-                      <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl font-bold text-gray-600">
+                      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-xl font-bold text-gray-600">
                           {userProfile?.name?.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 text-sm truncate capitalize">
+                        <h3 className="font-semibold text-gray-900 text-[15px] truncate capitalize">
                           {userProfile?.name}
                         </h3>
                         <p className="text-xs text-gray-600 mt-[1px] capitalize">

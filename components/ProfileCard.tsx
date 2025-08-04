@@ -90,7 +90,29 @@ export default function ProfileCard({
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       {/* Header Background */}
-      <div className="h-32 bg-gradient-to-r from-[#0A66C2] to-[#084d94]"></div>
+      <div className="h-32 bg-gradient-to-r from-[#0A66C2] to-[#084d94] relative">
+        {/* Edit Icon - Only show for profile owner */}
+        {isOwnProfile && (
+          <button
+            onClick={() => setShowEditModal(true)}
+            className="cursor-pointer absolute top-4 right-4 p-2 text-white hover:bg-white hover:text-[#084d94] hover:bg-opacity-10 rounded-full transition-colors"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+          </button>
+        )}
+      </div>
 
       {/* Profile Content */}
       <div className="px-6 pb-6">
@@ -124,18 +146,6 @@ export default function ProfileCard({
               </div>
             )}
           </div>
-
-          {/* Actions */}
-          {isOwnProfile && (
-            <div className="pt-4">
-              <button
-                onClick={() => setShowEditModal(true)}
-                className="cursor-pointer px-4 py-2 bg-[#0A66C2] text-white rounded-md hover:bg-[#084d94] transition-colors"
-              >
-                Edit Profile
-              </button>
-            </div>
-          )}
         </div>
       </div>
 

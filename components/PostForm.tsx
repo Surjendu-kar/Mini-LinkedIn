@@ -104,7 +104,7 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
       {/* Collapsed "Start a post" view */}
       <div className="bg-white rounded-lg shadow px-4 pt-4 pb-1">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 lg:w-12 lg:h-12 bg-gray-300 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-300 rounded-full flex items-center justify-center">
             <span className="text-md lg:text-lg font-bold text-gray-600">
               {userProfile?.name?.charAt(0).toUpperCase()}
             </span>

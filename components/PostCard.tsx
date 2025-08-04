@@ -34,7 +34,7 @@ export default function PostCard({ post, showAuthor = true }: PostCardProps) {
       {/* Post Header */}
       {showAuthor && (
         <div className="flex items-center mb-2 lg:mb-4">
-          <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+          <div className="w-10 h-10 lg:w-10 lg:h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
             <span className="text-md font-bold text-gray-600 capitalize">
               {post.author_name.charAt(0).toUpperCase()}
             </span>
