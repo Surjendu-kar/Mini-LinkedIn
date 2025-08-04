@@ -167,32 +167,32 @@ export default function Navbar() {
                 />
               </div>
             </form>
-
-            {/* Mobile Search Icon */}
-            <button
-              onClick={() => setShowMobileSearch(true)}
-              className="lg:hidden p-0 text-gray-600 hover:text-gray-900"
-            >
-              <MdSearch className="h-6 w-6" />
-            </button>
           </div>
 
           {/* Right Section - Navigation Icons */}
           <div
             ref={navContainerRef}
-            className={`flex items-center space-x-0 gap-[22px] lg:gap-0 lg:space-x-7 relative ${
+            className={`flex items-center space-x-0 gap-[19px] lg:gap-0 lg:space-x-7 relative ${
               showMobileSearch ? "lg:flex hidden" : "flex"
             }`}
           >
             {/* Animated Border - Desktop Only */}
             <div
-              className="absolute -bottom-1 h-0.5 bg-gray-900 rounded-full transition-all duration-300 ease-out hidden lg:block"
+              className="absolute -bottom-1 h-0.25 bg-gray-900 rounded-full transition-all duration-300 ease-out hidden lg:block"
               style={{
                 width: `${borderStyle.width}px`,
                 left: `${borderStyle.left}px`,
                 opacity: borderStyle.opacity,
               }}
             />
+
+            {/* Mobile Search Icon */}
+            <button
+              onClick={() => setShowMobileSearch(true)}
+              className="lg:hidden flex flex-col items-center transition-colors text-gray-600 hover:text-gray-900"
+            >
+              <MdSearch className="h-6 w-6" />
+            </button>
 
             {/* Home */}
             <Link
@@ -323,21 +323,15 @@ export default function Navbar() {
                 }`}
               >
                 <div
-                  className={`relative lg:top-[3px] w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center lg:mb-1 ${
+                  className={`relative lg:top-[3px] w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center lg:mb-1 ${
                     pathname?.startsWith("/profile") ? "bg-black" : ""
                   }`}
                 >
-                  <span
-                    className={`text-xs font-bold ${
-                      pathname?.startsWith("/profile")
-                        ? "text-white"
-                        : "text-gray-600"
-                    }`}
-                  >
+                  <span className="text-xs font-bold text-gray-600">
                     {userProfile?.name?.charAt(0).toUpperCase()}
                   </span>
                 </div>
-                <div className="lg:flex items-center hidden">
+                <div className="lg:flex items-center hidden relative -top-[2px]">
                   <span className="text-xs font-medium">Me</span>
                   <svg
                     className={`h-5 w-5 ml-0 transition-transform ${
@@ -550,7 +544,7 @@ export default function Navbar() {
               {/* Close Search Button */}
               <button
                 onClick={() => setShowMobileSearch(false)}
-                className="ml-4 p-2 text-gray-600 hover:text-gray-900"
+                className="ml-2 p-2 text-gray-600 hover:text-gray-900"
               >
                 <svg
                   className="h-6 w-6"
