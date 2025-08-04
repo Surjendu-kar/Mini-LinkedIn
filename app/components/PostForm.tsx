@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { supabase } from "@/lib/supabase";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
@@ -16,6 +16,8 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +71,25 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
     }
   };
 
-  const [showModal, setShowModal] = useState(false);
+  // Close modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        setShowModal(false);
+      }
+    };
+
+    if (showModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showModal]);
 
   const handleModalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,7 +169,10 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
           className="fixed inset-0 bg-opacity-20 flex items-center justify-center z-50 p-4"
           style={{ backdropFilter: "blur(2px)" }}
         >
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
+          <div
+            ref={modalRef}
+            className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200"
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b">
               <div className="flex items-center space-x-3">
