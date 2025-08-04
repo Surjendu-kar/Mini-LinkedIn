@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { login, loading, error, clearError } = useAuthStore();
+  const { login, loading, clearError } = useAuthStore();
   const router = useRouter();
 
   // Footer links array
@@ -64,12 +64,6 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
-                {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
-                    {error}
-                  </div>
-                )}
-
                 {/* Email Input */}
                 <div>
                   <input

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { User } from "@supabase/supabase-js";
+import toast from "react-hot-toast";
 import { supabase, UserProfile } from "@/lib/supabase";
 
 interface AuthState {
@@ -61,10 +62,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         userProfile: profile,
         loading: false,
       });
+
+      toast.success("Welcome to Mini-LinkedIn!");
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Login failed";
       set({ error: errorMessage, loading: false });
+      toast.error(errorMessage);
       throw error;
     }
   },
@@ -108,10 +112,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         userProfile: null,
         loading: false,
       });
+
+      toast.success(
+        "Account created successfully! Please sign in to continue."
+      );
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Signup failed";
       set({ error: errorMessage, loading: false });
+      toast.error(errorMessage);
       throw error;
     }
   },

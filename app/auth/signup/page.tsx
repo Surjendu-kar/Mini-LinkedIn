@@ -13,7 +13,7 @@ export default function SignupPage() {
     password: "",
     bio: "",
   });
-  const { signup, loading, error, clearError } = useAuthStore();
+  const { signup, loading, clearError } = useAuthStore();
   const router = useRouter();
 
   // Footer links array
@@ -83,12 +83,6 @@ export default function SignupPage() {
 
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
-                {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
-                    {error}
-                  </div>
-                )}
-
                 {/* Name Input */}
                 <div>
                   <input
