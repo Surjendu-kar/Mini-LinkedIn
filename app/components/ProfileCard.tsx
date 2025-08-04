@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { UserProfile, supabase } from "@/lib/supabase";
 import { useAuthStore } from "@/store/authStore";
 
@@ -35,10 +36,9 @@ export default function ProfileCard({
     e.preventDefault();
     if (!user) return;
 
-    try {
-      setLoading(true);
-      setError(null);
+    setError(null);
 
+    const updateProfilePromise = async () => {
       const { data, error: updateError } = await supabase
         .from("users")
         .update({
@@ -66,13 +66,16 @@ export default function ProfileCard({
       }
 
       setShowEditModal(false);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to update profile";
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+      return data;
+    };
+
+    toast.promise(updateProfilePromise(), {
+      loading: "Saving profile...",
+      success: <b>Profile updated successfully!</b>,
+      error: (err) => (
+        <b>{err instanceof Error ? err.message : "Failed to update profile"}</b>
+      ),
+    });
   };
 
   const handleEditCancel = () => {
@@ -127,7 +130,7 @@ export default function ProfileCard({
             <div className="pt-4">
               <button
                 onClick={() => setShowEditModal(true)}
-                className="px-4 py-2 bg-[#0A66C2] text-white rounded-md hover:bg-[#084d94] transition-colors"
+                className="cursor-pointer px-4 py-2 bg-[#0A66C2] text-white rounded-md hover:bg-[#084d94] transition-colors"
               >
                 Edit Profile
               </button>
@@ -147,7 +150,7 @@ export default function ProfileCard({
               </h2>
               <button
                 onClick={handleEditCancel}
-                className="text-gray-400 hover:text-gray-600 p-1"
+                className="text-gray-400 hover:text-gray-600 p-1 cursor-pointer"
               >
                 <svg
                   className="w-6 h-6"
